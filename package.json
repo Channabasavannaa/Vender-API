@@ -15,9 +15,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "start": "node \"build/aws.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.1002.0",
     "@aws-sdk/client-dynamodb": "^3.995.0",
     "@aws-sdk/client-lambda": "^3.995.0",
     "@aws-sdk/client-sqs": "^3.995.0",
@@ -26,6 +28,7 @@
     "dotenv": "^17.3.1"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.161",
     "@types/node": "^25.3.0",
     "typescript": "^5.9.3"
   }
