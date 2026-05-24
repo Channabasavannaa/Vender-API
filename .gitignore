@@ -35,3 +35,105 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+
+# =========================
+# Node.js
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package.json
+package-lock.json
+tsconfig.json
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Build Output
+dist/
+build/
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# =========================
+# Terraform
+# =========================
+.terraform/
+.terraform.lock.hcl
+
+# Terraform State Files
+*.tfstate
+*.tfstate.*
+
+# Terraform Variable Files
+*.tfvars
+*.tfvars.json
+
+# Terraform Crash Logs
+crash.log
+crash.*.log
+
+# Terraform Override Files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform Plan Files
+*.tfplan
+plan.out
+
+# =========================
+# AWS SAM / Serverless
+# =========================
+.aws-sam/
+.serverless/
+
+# =========================
+# Lambda Artifacts
+# =========================
+*.zip
+
+# =========================
+# IDE Files
+# =========================
+.vscode/
+.idea/
+*.iml
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Testing
+# =========================
+.nyc_output/
+coverage/
+
+# =========================
+# Temporary Files
+# =========================
+tmp/
+temp/
+.cache/
+
+# =========================
+# AWS Credentials
+# =========================
+.aws/
