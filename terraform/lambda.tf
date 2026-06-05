@@ -48,7 +48,7 @@ resource "aws_lambda_permission" "disconnect_permission" {   ##this permission i
 resource "aws_lambda_function" "sendvender" {
     function_name = "${var.app_name}-sendvender"
     role          = aws_iam_role.lambda_main.arn
-    image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/sendVender:${var.image_tag}"
+    image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/sendVenderMessage:${var.image_tag}"
     package_type  = "Image"
     timeout       = 30
     environment {
@@ -77,7 +77,7 @@ resource "aws_lambda_permission" "sendvender_permission" {
 resource "aws_lambda_function" "getvender" {
     function_name = "${var.app_name}-getvender"
     role          = aws_iam_role.lambda_main.arn
-    image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/getVender:${var.image_tag}"
+    image_uri     = "${local.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/getallVender:${var.image_tag}"
     package_type  = "Image"
     timeout       = 30
     environment {
