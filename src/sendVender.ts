@@ -19,8 +19,8 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
 
   const tableName = process.env.TABLE_NAME ?? "WebSocketConnections";
-  const webSocketUrl = process.env.WEBSOCKET_URL ?? "https://sqs.us-east-2.amazonaws.com/946926532089/messageQ";
-  const sqsUrl = process.env.SQS_URL ?? "";
+  const webSocketUrl = process.env.WEBSOCKET_URL ?? "";
+  const sqsUrl = process.env.SQS_URL ?? "https://sqs.us-east-2.amazonaws.com/946926532089/messageQ";
   
   const endpoint = new URL(webSocketUrl);
 

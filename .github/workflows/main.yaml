@@ -25,25 +25,25 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
           role-session-name: ${{ secrets.AWS_ONDC_ROLE_SESSION_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
-# TO UNDERSTAND
-      # - name: Login to Amazon ECR
-      #   id: login-ecr
-      #   uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: Build repository
-      #   uses: int128/create-ecr-repository-action@v1
-      #   id: ecr
-      #   with:
-      #     repository: twitter
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: Build, tag, and push image to ECR
-      #   id: build-image
-      #   env:
-      #     AWS_IMAGE_TAG: ${{ github.sha }}
-      #   run: |
-      #     docker build -t ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG .
-      #     docker push ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG
-##
+      - name: Build repository
+        uses: int128/create-ecr-repository-action@v1
+        id: ecr
+        with:
+         repository: twitter
+
+      - name: Build, tag, and push image to ECR
+        id: build-image
+        env:
+          AWS_IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG .
+          docker push ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG
+
       - name: Setup Terraform 
         uses: hashicorp/setup-terraform@v2
         with:
