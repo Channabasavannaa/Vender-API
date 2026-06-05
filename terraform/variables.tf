@@ -45,4 +45,7 @@ variable "dynamodb_vendor_table_name" {
   default = "Vendors"
 }
 
-variable "image_tag" {}
+variable "image_tag" {
+  type    = string
+  default = "latest"
+}
