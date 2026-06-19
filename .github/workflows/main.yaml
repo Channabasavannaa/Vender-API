@@ -52,7 +52,7 @@ jobs:
           declare -A targets=(
             [connect]=connect
             [disconnect]=disconnect
-            [sendVender]=sendvender
+            [sendvender]=sendvender
             [getallvender]=getallvenders
           )
           for repo in "${!targets[@]}"; do
