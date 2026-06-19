@@ -38,7 +38,7 @@ CMD ["build/disconnect.js"]
 
 
 #sendVenderMessage
-FROM amazon/aws-lambda-nodejs AS sendVenderMessage
+FROM amazon/aws-lambda-nodejs AS sendVender
 
 COPY package.json .
 
@@ -52,7 +52,7 @@ CMD ["build/sendVender.handler"]
 
 
 #getAllVenders
-FROM amazon/aws-lambda-nodejs AS getAllVenders
+FROM amazon/aws-lambda-nodejs AS getallvenders
 
 COPY package.json .
 
