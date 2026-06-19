@@ -38,7 +38,7 @@ CMD ["build/disconnect.js"]
 
 
 #sendVenderMessage
-FROM amazon/aws-lambda-nodejs AS sendVender
+FROM amazon/aws-lambda-nodejs AS sendvender
 
 COPY package.json .
 

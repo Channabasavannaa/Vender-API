@@ -52,8 +52,8 @@ jobs:
           declare -A targets=(
             [connect]=connect
             [disconnect]=disconnect
-            [sendVenderMessage]=sendVenderMessage
-            [getallVender]=getAllVenders
+            [sendVender]=sendvender
+            [getallvender]=getallvenders
           )
           for repo in "${!targets[@]}"; do
             stage="${targets[$repo]}"
