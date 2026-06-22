@@ -58,7 +58,6 @@ resource "aws_apigatewayv2_stage" "primary" {
 resource "aws_apigatewayv2_api" "http_gw" {
     name                       = "${var.app_name}-http-gw"
     protocol_type              = "HTTP"
-    route_selection_expression = "$request.body.action"
     cors_configuration {
         allow_origins = ["*"]
         allow_methods   = ["GET", "POST", "PUT", "DELETE"]
