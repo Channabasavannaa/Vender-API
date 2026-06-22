@@ -54,14 +54,14 @@ resource "aws_lambda_function" "sendvender" {
     environment {
       variables = {
         TABLE_NAME = "${var.websocket_table_name}"
-        AWS_SQS_URL = "https://sqs.us-east-2.amazonaws.com/946926532089/messageQ"
+        AWS_SQS_URL = "https://sqs.us-east-1.amazonaws.com/946926532089/Mqueue"
         #AWS_WEBSOCKET_URL = "";
       }
     }
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
-  event_source_arn = "arn:aws:sqs:us-east-2:946926532089:messageQ"
+  event_source_arn = "arn:aws:sqs:us-east-1:946926532089:Mqueue"
   function_name    = aws_lambda_function.sendvender.arn
 }
 
@@ -70,7 +70,7 @@ resource "aws_lambda_permission" "sendvender_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sendvender.function_name
   principal     = "sqs.amazonaws.com"
-  source_arn    = "arn:aws:sqs:us-east-2:946926532089:messageQ"
+  source_arn    = "arn:aws:sqs:us-east-1:946926532089:Mqueue"
 }
 
 
