@@ -76,8 +76,8 @@ resource "aws_apigatewayv2_integration" "getvender" {
 
 resource "aws_apigatewayv2_route" "getvenders_route" {
     api_id    = aws_apigatewayv2_api.http_gw.id
-    route_key = "GET /getvenders"
-    target    = "integrations/${aws_apigatewayv2_integration.getvenders.id}"
+    route_key = "GET /getvender"
+    target    = "integrations/${aws_apigatewayv2_integration.getvender.id}"
 }
 
 resource "aws_apigatewayv2_stage" "http_primary" {
