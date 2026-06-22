@@ -75,7 +75,7 @@ jobs:
           AWS_IMAGE_TAG: ${{ github.sha }}
           AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_SENDVENDER }}
         run: |
-          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target sendVenderMessage .
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target sendvender .
           docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
 
       - name: Build getvendors ECR
@@ -91,7 +91,7 @@ jobs:
           AWS_IMAGE_TAG: ${{ github.sha }}
           AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_GETVENDERS }}
         run: |
-          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target getAllVenders .
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target getallvendors .
           docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
 
       - name: Setup Terraform
