@@ -21,7 +21,7 @@ resource "aws_apigatewayv2_integration" "disconnect" {
 resource "aws_apigatewayv2_integration" "sendvender" {      
     api_id           = aws_apigatewayv2_api.websocket_gw.id
     integration_type = "AWS_PROXY"
-    integration_uri  = aws_lambda_function.sendvendor.invoke_arn
+    integration_uri  = aws_lambda_function.sendvender.invoke_arn
     integration_method = "POST"
 }
 
