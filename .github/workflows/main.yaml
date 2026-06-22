@@ -5,9 +5,9 @@ on:
       - main
   pull_request:
 permissions:
-      id-token: write
-      contents: read
-      pull-requests: write 
+  id-token: write
+  contents: read
+  pull-requests: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -30,40 +30,71 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build repositories
-        id: create-ecr-repos
-        run: |
-          for repo in connect disconnect sendvender getallvender; do
-            aws ecr describe-repositories --repository-names "$repo" --region ${{ secrets.AWS_REGION }} >/dev/null 2>&1 || \
-              aws ecr create-repository --repository-name "$repo" --region ${{ secrets.AWS_REGION }}
-          done
+      - name: Build connect ECR
+        uses: int128/create-ecr-repository-action@v1
+        id: connect-ecr
+        with:
+          repository: ${{ secrets.AWS_ECR_NAME_CONNECT }}
 
-      - name: Build, tag, and push images to ECR
+      - name: Build, tag, and push connect image to ECR
+        id: build-image-connect
         env:
+          AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           AWS_IMAGE_TAG: ${{ github.sha }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_CONNECT }}
         run: |
-          declare -A targets=(
-            [connect]=connect
-            [disconnect]=disconnect
-            [sendvender]=sendvender
-            [getallvender]=getallvenders
-          )
-          for repo in "${!targets[@]}"; do
-            stage="${targets[$repo]}"
-            docker build --target "$stage" -t "$ECR_REGISTRY/$repo:$AWS_IMAGE_TAG" .
-            docker push "$ECR_REGISTRY/$repo:$AWS_IMAGE_TAG"
-          done
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target connect .
+          docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
 
-      - name: Build, tag, and push image to ECR
-        id: build-image
+      - name: Build disconnect ECR
+        uses: int128/create-ecr-repository-action@v1
+        id: disconnect-ecr
+        with:
+          repository: ${{ secrets.AWS_ECR_NAME_DISSCONNECT }}
+
+      - name: Build, tag, and push disconnect image to ECR
+        id: build-image-disconnect
         env:
+          AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           AWS_IMAGE_TAG: ${{ github.sha }}
+          AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_DISSCONNECT }}
         run: |
-          docker build -t ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG .
-          docker push ${{ steps.ecr.outputs.repository-uri }}:$AWS_IMAGE_TAG
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target disconnect .
+          docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
 
-      - name: Setup Terraform 
+      - name: Build sendvender ECR
+        uses: int128/create-ecr-repository-action@v1
+        id: sendvender-ecr
+        with:
+          repository: ${{ secrets.AWS_ECR_NAME_SENDVENDER }}
+
+      - name: Build, tag, and push sendvender image to ECR
+        id: build-image-sendvender
+        env:
+          AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          AWS_IMAGE_TAG: ${{ github.sha }}
+          AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_SENDVENDER }}
+        run: |
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target sendVenderMessage .
+          docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
+
+      - name: Build getvendors ECR
+        uses: int128/create-ecr-repository-action@v1
+        id: getvendors-ecr
+        with:
+          repository: ${{ secrets.AWS_ECR_NAME_GETVENDERS }}
+
+      - name: Build, tag, and push getvendors image to ECR
+        id: build-image-getvendors
+        env:
+          AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          AWS_IMAGE_TAG: ${{ github.sha }}
+          AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_NAME_GETVENDERS }}
+        run: |
+          docker build -t $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG --target getAllVenders .
+          docker push $AWS_ECR_REGISTRY/$AWS_ECR_REPOSITORY:$AWS_IMAGE_TAG
+
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.2.5
@@ -81,20 +112,24 @@ jobs:
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: > 
-          terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" 
-          -backend-config="key=${AWS_BUCKET_KEY_NAME}" 
+        run: >
+          terraform init -backend-config="bucket=${AWS_BUCKET_NAME}"
+          -backend-config="key=${AWS_BUCKET_KEY_NAME}"
           -backend-config="region=${AWS_REGION}"
+
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
         working-directory: ./terraform
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
         working-directory: ./terraform
-        run: terraform plan -no-color
         if: github.event_name == 'pull_request'
+        env:
+          TF_VAR_image_tag: ${{ github.sha }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+        run: terraform plan -no-color
 
       - name: Terraform Run
         id: run
@@ -112,7 +147,7 @@ jobs:
             \`\`\`\n
             ${{ steps.validate.outputs.stdout }}
             \`\`\`
- 
+
             </details>
 
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
