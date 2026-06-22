@@ -66,10 +66,10 @@ resource "aws_apigatewayv2_api" "http_gw" {
     }
 }
 
-resource "aws_apigatewayv2_integration" "getvenders" {        
+resource "aws_apigatewayv2_integration" "getvender" {        
     api_id           = aws_apigatewayv2_api.http_gw.id
     integration_type = "AWS_PROXY"
-    integration_uri  = aws_lambda_function.getvenders.invoke_arn
+    integration_uri  = aws_lambda_function.getvender.invoke_arn
     integration_method = "POST"
 }
 
