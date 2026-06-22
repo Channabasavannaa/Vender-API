@@ -13,7 +13,7 @@ variable "app_name_generic" {
 variable "sqs_name" {
   type        = string
   description = "Name of queue"
-  default     = "twitter-queue"
+  default     = "Mqueue"
 }
 
 variable "websocket_table_name" {
@@ -25,7 +25,7 @@ variable "websocket_table_name" {
 variable "sqs_queue_name" {
   type        = string
   description = "Queue name"
-  default     = "twitter-queue"
+  default     = "Mqueue"
 }
 
 variable "aws_region" {
