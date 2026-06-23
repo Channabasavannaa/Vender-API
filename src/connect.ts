@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { addconnection } from "./aws";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const tableName = process.env.TABLE_NAME ?? "WebSocketConnections";
+    const tableName = process.env.TABLE_NAME ?? "WebSocketConnections"; 
     const connectionId = event.requestContext.connectionId ?? "";
     console.log("Connection ID:", connectionId);
     const res = await addconnection(tableName, connectionId);

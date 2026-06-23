@@ -38,7 +38,7 @@ export const RemoveConnection = async (tableName: string, connectionId: string) 
         connectionId : connectionId,
       },
     });
-
+    console.log("Attempting to delete connectionId:", connectionId, "from table:", tableName);
     const res = await docClient.send(command);
     return res;
 
