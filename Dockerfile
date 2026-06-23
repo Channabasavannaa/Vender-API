@@ -34,7 +34,7 @@ COPY . .
 
 RUN npx tsc
 
-CMD ["build/disconnect.js"]
+CMD ["build/disconnect.handler"]
 
 
 #sendVenderMessage
