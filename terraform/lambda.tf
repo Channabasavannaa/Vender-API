@@ -16,7 +16,7 @@ resource "aws_lambda_permission" "connect_permission" {   ##this permission is f
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.connect.function_name
   principal     = "apigateway.amazonaws.com"
-  #source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*"
+  source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*"
 }
 
 
@@ -39,7 +39,7 @@ resource "aws_lambda_permission" "disconnect_permission" {   ##this permission i
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.disconnect.function_name
   principal     = "apigateway.amazonaws.com"
-  #source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*"
+  source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*"
 }
 
 
@@ -55,8 +55,7 @@ resource "aws_lambda_function" "sendvender" {
       variables = {
         TABLE_NAME = "${var.websocket_table_name}"
         AWS_SQS_URL = "https://sqs.us-east-1.amazonaws.com/946926532089/Mqueue"
-        #AWS_WEBSOCKET_URL = "";
-      }
+        AWS_WEBSOCKET_URL = "wss://5yhj40zmak.execute-api.us-east-1.amazonaws.com/primary/"      }
     }
 }
 
@@ -93,5 +92,5 @@ resource "aws_lambda_permission" "getvender_permission" {   ##this permission is
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.getvender.function_name
   principal     = "apigateway.amazonaws.com"
-  #source_arn    = "${aws_apigatewayv2_api.websocket_gw.execution_arn}/*"
+  source_arn    = "${aws_apigatewayv2_api.http_gw.execution_arn}/*"
 }
